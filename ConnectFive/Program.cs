@@ -8,21 +8,21 @@ namespace ConnectFive
 {
     class Program
     {
-        public static string[,] size = new string[8, 8];
+        public static string[,] board = new string[8, 8];
 
         static void Main(string[] args)
         {
-
+            //SwitchPlayers();
 
             //fill array with *
-            for (int i = 0; i < size.GetLength(0); i++)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for (int d = 0; d < size.GetLength(1); d++)
+                for (int d = 0; d < board.GetLength(1); d++)
                 {
-                    size[i, d] = "*";       //star means index is empty
+                    board[i, d] = "*";       //star means index is empty
                 }
             }
-            printBoard(size);
+            printBoard(board);
             //string choice = Console.ReadLine();
             
 
@@ -57,38 +57,33 @@ namespace ConnectFive
                 Console.WriteLine(" =================================");
                 
             }
+            SwitchPlayers();
             CheckForInput();
         }
         static void AddThingToTheTwoDimensionalArray(int input)
         {
             input--;
-            if (variables.lastx != input)
+            
+            if (variables.lastx != input)       
             {
                 variables.x = 7;
-
             }
-            else
-            {
-                
-
-            }
-
 
 
             //size[variables.x, input] = "A";
-            if (size[variables.x,input] == "*" ) //if index is empty then place player piece there..
+            if (board[variables.x,input] == "*" ) //if index is empty then place player piece there..
             {
                 
                 
-                size[variables.x, input] = "A";
-
+                board[variables.x, input] = variables.PlayerChip;
+                variables.x--;
 
             }
-            else if (size[variables.x, input] == "A" || size[variables.x,input] == "B")  //
+            else if (board[variables.x, input] == "A" || board[variables.x,input] == "B")  //
             {
 
 
-                size[variables.x - 1, input] = "A";
+                board[variables.x - 1, input] = variables.PlayerChip;
                 variables.x--;
 
 
@@ -96,30 +91,40 @@ namespace ConnectFive
             variables.lastx = input;
 
 
-            printBoard(size);
+            printBoard(board);
         }
+
 
         static void CheckForInput()
         {
-            Console.WriteLine("\nWhich column would you like to add to?");
+            //todo: add input validation
+            Console.WriteLine("\nReady {0}\nWhich column would you like to add to?", variables.PlayerIDstring);
             int input = int.Parse(Console.ReadLine());
 
             AddThingToTheTwoDimensionalArray(input);
 
-
-
         }
-
-        static bool CheckLastX()
+        static void SwitchPlayers()
         {
-            if (variables.x != variables.lastx)
+            
+            if (variables.player1 == true)
             {
-
-                return false;
+                variables.PlayerID = 0;
+                variables.PlayerIDstring = "Player One";
+                variables.PlayerChip = "A";
+                variables.player1 = false;
+            }
+            else if (variables.player1 == false)
+            {
+                variables.PlayerID = 1;
+                variables.PlayerIDstring = "Player Two";
+                variables.PlayerChip = "B";
+                variables.player1 = true;
             }
 
-            return true;
+
         }
+
         
 
     }
@@ -127,20 +132,12 @@ namespace ConnectFive
     {
         public static int x = 7;
         public static int lastx;
-        public static int PlayerID = 0;     //0 is player 1//1 is player 2
+        public static int PlayerID;
+        public static string PlayerIDstring;     
+        public static bool player1 = true;
+        public static string PlayerChip;
+        
 
-        public static string GetPlayerID()
-        {
-            if (PlayerID == 0)
-            {
-                return "Player 1";
-            }
-            else if (PlayerID == 1)
-            {
-                return "Player 2";
-            }
-            return null;
-        }
 
     }
 
