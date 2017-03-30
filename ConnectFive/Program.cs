@@ -12,7 +12,6 @@ namespace ConnectFive
 
         static void Main(string[] args)
         {
-            //SwitchPlayers();
 
             //fill array with *
             for (int i = 0; i < board.GetLength(0); i++)
@@ -23,10 +22,7 @@ namespace ConnectFive
                 }
             }
             printBoard(board);
-            //string choice = Console.ReadLine();
             
-
-
             Console.ReadKey();
         }
 
@@ -42,53 +38,58 @@ namespace ConnectFive
                 //Console.Write("");
                 for (int x = 0; x < size.GetLength(1); x++)
                 {
-                    Console.Write(" | ");                   
+                    Console.Write(" | ");
 
-                    if (size[y,x] == "*")
+                    if (size[y, x] == "*")
                     {
                         Console.Write(" ");
                     }
                     else
                     {
-                        Console.Write(size[y,x]);
-                    }                  
+                        Console.Write(size[y, x]);
+                    }
                 }
                 Console.Write(" |\n");
                 Console.WriteLine(" =================================");
-                
+
             }
             SwitchPlayers();
             CheckForInput();
         }
-        static void AddThingToTheTwoDimensionalArray(int input)
+        static void AddThingToTheTwoDimensionalArray(int column)
         {
-            input--;
-            
-            if (variables.lastx != input)       
+            column--;
+
+            if ((variables.lastx != column) || column == 0)
             {
                 variables.x = 7;
             }
-
-
-            //size[variables.x, input] = "A";
-            if (board[variables.x,input] == "*" ) //if index is empty then place player piece there..
+            else
             {
-                
-                
-                board[variables.x, input] = variables.PlayerChip;
-                variables.x--;
-
+                //variables.x--;
             }
-            else if (board[variables.x, input] == "A" || board[variables.x,input] == "B")  //
+
+
+            
+            if (board[variables.x, column] == "*" /*|| board[variables.x, column] != "A" || board[variables.x, column] != "B"*/) //if index is empty then place player piece there..
             {
 
+                    board[variables.x , column] = variables.PlayerLetter;
+                
 
-                board[variables.x - 1, input] = variables.PlayerChip;
-                variables.x--;
+            }
+            /*
+            else if (board[variables.x, column] == "A" || board[variables.x, column] == "B")  //
+            {
+
+                
+                board[variables.x, column] = variables.PlayerChip;
+                //variables.x--;
 
 
             }
-            variables.lastx = input;
+            */
+            variables.lastx = column;
 
 
             printBoard(board);
@@ -106,26 +107,30 @@ namespace ConnectFive
         }
         static void SwitchPlayers()
         {
-            
+
             if (variables.player1 == true)
             {
                 variables.PlayerID = 0;
                 variables.PlayerIDstring = "Player One";
-                variables.PlayerChip = "A";
+                variables.PlayerLetter = "A";
                 variables.player1 = false;
             }
             else if (variables.player1 == false)
             {
                 variables.PlayerID = 1;
                 variables.PlayerIDstring = "Player Two";
-                variables.PlayerChip = "B";
+                variables.PlayerLetter = "B";
                 variables.player1 = true;
             }
 
 
         }
 
-        
+        static void CheckForWin()
+        {
+
+
+        }
 
     }
     class variables
@@ -133,17 +138,16 @@ namespace ConnectFive
         public static int x = 7;
         public static int lastx;
         public static int PlayerID;
-        public static string PlayerIDstring;     
+        public static string PlayerIDstring;
         public static bool player1 = true;
-        public static string PlayerChip;
-        
+        public static string PlayerLetter;
+
 
 
     }
 
 }
 /*
-
           ~~Connect Five~~
  =================================
  |   |   |   |   |   |   |   |   |
@@ -162,7 +166,5 @@ namespace ConnectFive
  =================================
  |   |   |   |   |   |   |   |   |
  =================================
-
 Which column would you like to add to?
-
 */
