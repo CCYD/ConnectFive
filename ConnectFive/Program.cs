@@ -60,38 +60,15 @@ namespace ConnectFive
         {
             column--;
 
-            if ((variables.lastx != column) || column == 0)
+            for (int i = 7; i > 0; i--)
             {
-                variables.x = 7;
+                if (board[i, column] == "*" )
+                {
+                    board[i, column] = variables.PlayerLetter;
+                    break;
+                }            
             }
-            else
-            {
-                //variables.x--;
-            }
-
-
             
-            if (board[variables.x, column] == "*" /*|| board[variables.x, column] != "A" || board[variables.x, column] != "B"*/) //if index is empty then place player piece there..
-            {
-
-                    board[variables.x , column] = variables.PlayerLetter;
-                
-
-            }
-            /*
-            else if (board[variables.x, column] == "A" || board[variables.x, column] == "B")  //
-            {
-
-                
-                board[variables.x, column] = variables.PlayerChip;
-                //variables.x--;
-
-
-            }
-            */
-            variables.lastx = column;
-
-
             printBoard(board);
         }
 
