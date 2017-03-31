@@ -3,31 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
+//Yuri Doubas
+//Unit 2 Assignment 3
 namespace ConnectFive
 {
     class Program
     {
+        //create 2d array which will hold the board 
         public static string[,] board = new string[8, 8];
 
         static void Main(string[] args)
         {
-            //fill array with *
-            for (int i = 0; i < board.GetLength(0); i++)
+            //fill array with asteriks
+            for (int i = 0; i < board.GetLength(0); i++)    //for each row
             {
-                for (int d = 0; d < board.GetLength(1); d++)
+                for (int d = 0; d < board.GetLength(1); d++) //for each column
                 {
-                    board[i, d] = "*";       //star means index is empty
+                    board[i, d] = "*";       
                 }
             }
-            printBoard(board);
 
+            Menu();  //call Menu() method
             Console.ReadKey();
+        }
+
+        static void Menu()
+        {
+            //This method presents the user with 3 choices 
+            Console.Clear();
+            Console.Write("What u want to do?\n1. PvP\n2. Load File (Not implemented)\n3. PvAI(Not Implemented)\n>");
+            int input;
+
+            while (!(int.TryParse(Console.ReadLine(), out input)))  //wait for user to enter correct input
+            {
+                Console.Write("Invalid input. Try again. \n>");
+            }
+            if (input == 1)
+            {                
+                printBoard(board);
+            }
+            else if (input == 2)
+            {
+
+            }
+            else if (input == 3)
+            {
+
+            }
+            Menu(); //loop back to Menu()
+
         }
 
         static void printBoard(string[,] size)
         {
-            //this function prints the board
+            //this function prints the board and all player pieces on it
             Console.Clear();
             Console.WriteLine("\n          ~~Connect Five~~");
             Console.WriteLine(" =================================");    //top of the board
@@ -39,20 +69,20 @@ namespace ConnectFive
                     Console.Write(" | ");
                     if (size[y, x] == "*")  //check if index is empty
                     {
-                        Console.Write(" ");
+                        Console.Write(" "); //print an empty space where there are no pieces
                     }
                     else
                     {
-                        if (board[y, x] == "A")
+                        if (board[y, x] == "A") //color all player one pieces red
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
-                        else if (board[y, x] == "B")
+                        else if (board[y, x] == "B") //color all player two pieces blue    
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }
-                        Console.Write(size[y, x]);
-                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.Write(size[y, x]);  //print a player piece
+                        Console.ForegroundColor = ConsoleColor.Gray; //reset text color
                     }
                 }
                 Console.Write(" |\n");
@@ -60,17 +90,18 @@ namespace ConnectFive
             }
             Console.WriteLine(" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |");
 
-            CheckForWin();
-            SwitchPlayers();
+            CheckForWin();  //call CheckForWin() to check if 5 pieces are in a row
+            SwitchPlayers(); //call SwitchPlayers() to switch players
 
-            CheckForInput();
+            CheckForInput(); //call CheckForInput() to check user input
 
 
         }
-        static void AddThingToTheTwoDimensionalArray(int column)
+        static void DropPlayerPiece(int column)
         {
+            //this method drops a piece in the user selected column
             column--;      //the user enters a value of 1-8 but the for loop uses 0-7. This solves that
-            for (int i = 7; i >= 0; i--)
+            for (int i = 7; i >= 0; i--)    //this places the player letter in the bottommost index
             {
                 if (board[i, column] == "*")
                 {
@@ -78,27 +109,25 @@ namespace ConnectFive
                     break;
                 }
             }
-            printBoard(board);
+            printBoard(board);  //call the printBoard() method to print the board
         }
 
         static void CheckForInput()
         {
-            //todo: add input validation
+            //this method evaluates user input
             Console.Write("\n\nReady {0}\nWhich column would you like to add to? (1-8)\n>", variables.PlayerIDstring);
-            //int input = int.Parse(Console.ReadLine());
             int input;
 
-
-            while (!(int.TryParse(Console.ReadLine(), out input)))
+            while (!(int.TryParse(Console.ReadLine(), out input)))  //ask user for input 
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
-            AddThingToTheTwoDimensionalArray(input);
+            DropPlayerPiece(input);    //call DropPlayerPiece with input parameter
 
         }
         static void SwitchPlayers()
         {
-
+            //this method switches the active player
             if (variables.player1 == true)
             {
                 variables.PlayerIDstring = "Player One";
@@ -113,11 +142,11 @@ namespace ConnectFive
             }
         }
 
-
+        
         static void CheckForWin() //THIS IS ALL BROKEN
         {
             //this method checks horizontaly, vertically, or diagonally for 5 checkers and determines the winner
-            
+          
             int win = 0;
 
 
@@ -126,7 +155,7 @@ namespace ConnectFive
             {
                 for (int x = 0; x < (board.GetLength(1) - 3); x++)
                 {
-                    if (x <= 4)
+                    if (x < 4)
                     {
                         if (board[x, y] == variables.PlayerLetter &&
                         board[x + 1, y] == variables.PlayerLetter &&
@@ -144,7 +173,7 @@ namespace ConnectFive
             {
                 for (int y = 0; y < (board.GetLength(0) - 3); y++)
                 {
-                    if (y <= 4)
+                    if (y < 4)
                     {
                         if (board[x, y] == variables.PlayerLetter &&
                         board[x, y + 1] == variables.PlayerLetter &&
@@ -157,14 +186,13 @@ namespace ConnectFive
                     }
                 }
             }
-            //if x becomes 7 then stop
             //diagonal
 
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    if (x <= 4 && y <= 4)
+                    if (x < 4 && y < 4)
                     {
                         if ((board[x, y] == variables.PlayerLetter &&
                             board[x + 1, y + 1] == variables.PlayerLetter &&
@@ -192,14 +220,18 @@ namespace ConnectFive
             }
 
         }
+        
+
 
 
         static void EndGame(string winner)
         {
-            Console.WriteLine("Winner is " + winner);
-
-
+            Console.WriteLine(winner + " Won the game!\n Press any key to return to menu.");
+            Console.ReadKey();
+            Menu();
         }
+
+
         class variables
         {
             public static int x = 7;
@@ -210,6 +242,7 @@ namespace ConnectFive
 
 
         }
+        
     }
 }
 /*
