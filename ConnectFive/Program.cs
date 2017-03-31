@@ -30,9 +30,10 @@ namespace ConnectFive
 
         static void printBoard(string[,] size)
         {
+            //this function prints the board
             Console.Clear();
             Console.WriteLine("\n          ~~Connect Five~~");
-            Console.WriteLine(" =================================");
+            Console.WriteLine(" =================================");    //top of the board
             for (int y = 0; y < size.GetLength(0); y++)
             {
                 //Console.Write("");
@@ -40,7 +41,7 @@ namespace ConnectFive
                 {
                     Console.Write(" | ");
 
-                    if (size[y, x] == "*")
+                    if (size[y, x] == "*")  //check if index is empty
                     {
                         Console.Write(" ");
                     }
@@ -50,7 +51,7 @@ namespace ConnectFive
                     }
                 }
                 Console.Write(" |\n");
-                Console.WriteLine(" =================================");
+                Console.WriteLine(" =================================");    //bottom of the board
 
             }
             SwitchPlayers();
@@ -60,7 +61,7 @@ namespace ConnectFive
         {
             column--;
 
-            for (int i = 7; i > 0; i--)
+            for (int i = 7; i >= 0; i--)
             {
                 if (board[i, column] == "*" )
                 {
@@ -76,7 +77,7 @@ namespace ConnectFive
         static void CheckForInput()
         {
             //todo: add input validation
-            Console.WriteLine("\nReady {0}\nWhich column would you like to add to?", variables.PlayerIDstring);
+            Console.Write("\n\nReady {0}\nWhich column would you like to add to? (1-8)\n>", variables.PlayerIDstring);
             int input = int.Parse(Console.ReadLine());
 
             AddThingToTheTwoDimensionalArray(input);
@@ -113,7 +114,6 @@ namespace ConnectFive
     class variables
     {
         public static int x = 7;
-        public static int lastx;
         public static int PlayerID;
         public static string PlayerIDstring;
         public static bool player1 = true;
