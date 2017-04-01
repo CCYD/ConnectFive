@@ -15,15 +15,7 @@ namespace ConnectFive
 
         static void Main(string[] args)
         {
-            //fill array with asteriks
-            for (int i = 0; i < board.GetLength(0); i++)    //for each row
-            {
-                for (int d = 0; d < board.GetLength(1); d++) //for each column
-                {
-                    board[i, d] = "*";       
-                }
-            }
-
+            ClearArray();
             Menu();  //call Menu() method
             Console.ReadKey();
         }
@@ -32,7 +24,7 @@ namespace ConnectFive
         {
             //This method presents the user with 3 choices 
             Console.Clear();
-            Console.Write("What u want to do?\n1. PvP\n2. Load File (Not implemented)\n3. PvAI(Not Implemented)\n>");
+            Console.Write("What u want to do?\n1. PvP\n2. Load File (Not implemented)\n3. PvAI (Not Implemented)\n>");
             int input;
 
             while (!(int.TryParse(Console.ReadLine(), out input)))  //wait for user to enter correct input
@@ -45,7 +37,7 @@ namespace ConnectFive
             }
             else if (input == 2)
             {
-
+                ReadFromFile();
             }
             else if (input == 3)
             {
@@ -97,7 +89,7 @@ namespace ConnectFive
 
 
         }
-        static void DropPlayerPiece(int column)
+        static void DropPlayerPiece(int column, bool ReadFromFile)
         {
             //this method drops a piece in the user selected column
             column--;      //the user enters a value of 1-8 but the for loop uses 0-7. This solves that
@@ -109,7 +101,10 @@ namespace ConnectFive
                     break;
                 }
             }
-            printBoard(board);  //call the printBoard() method to print the board
+            if (ReadFromFile == false)
+            {
+                printBoard(board);  //call the printBoard() method to print the board
+            }
         }
 
         static void CheckForInput()
@@ -122,8 +117,14 @@ namespace ConnectFive
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
-            DropPlayerPiece(input);    //call DropPlayerPiece with input parameter
-
+            if (input >= 1 && input <= 8)   //check if user entered a number between 1 and 8
+            {
+                DropPlayerPiece(input, false);    //call DropPlayerPiece with input parameter
+            }
+            else
+            {
+                CheckForInput();        //recursion?
+            }
         }
         static void SwitchPlayers()
         {
@@ -143,14 +144,14 @@ namespace ConnectFive
         }
 
         
-        static void CheckForWin() //THIS IS ALL BROKEN
+        static void CheckForWin()
         {
             //this method checks horizontaly, vertically, or diagonally for 5 checkers and determines the winner
           
             int win = 0;
 
 
-            //vertical THIS IS BROKEN
+            //vertical 
             for (int y = 0; y < board.GetLength(0); y++)
             {
                 for (int x = 0; x < (board.GetLength(1) - 3); x++)
@@ -187,7 +188,6 @@ namespace ConnectFive
                 }
             }
             //diagonal
-
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 for (int y = 0; y < board.GetLength(1); y++)
@@ -226,11 +226,38 @@ namespace ConnectFive
 
         static void EndGame(string winner)
         {
+            //This method displays the winner and resets the board
             Console.WriteLine(winner + " Won the game!\n Press any key to return to menu.");
             Console.ReadKey();
+
+            ClearArray();
+
             Menu();
         }
 
+        static void ClearArray()
+        {
+            //fill array with asteriks
+            for (int i = 0; i < board.GetLength(0); i++)    //for each row
+            {
+                for (int d = 0; d < board.GetLength(1); d++) //for each column
+                {
+                    board[i, d] = "*";
+                }
+            }
+        }
+
+        static void ReadFromFile()
+        {
+
+
+
+
+            
+            ClearArray();
+            Console.ReadKey();
+
+        }
 
         class variables
         {
@@ -264,5 +291,4 @@ namespace ConnectFive
  =================================
  |   |   |   |   |   |   |   |   |
  =================================
-Which column would you like to add to?
 */
