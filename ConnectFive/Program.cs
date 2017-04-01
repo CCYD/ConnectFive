@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using System.IO;
 //Yuri Doubas
 //Unit 2 Assignment 3
+//This program is a game played by two players that alternate placing checkers on an 8x8 board. The first player to place 5 checkers in a row horizontally, vertically,
+//or diagonally wins the game.
+//ye be warned for spaghetti lies ahead.
 namespace ConnectFive
 {
     class Program
     {
-        //create 2d array which will hold the board 
+        //create 2d array which will hold the board and checkers
         public static string[,] board = new string[8, 8];
 
         static void Main(string[] args)
@@ -24,7 +27,7 @@ namespace ConnectFive
         {
             //This method presents the user with 3 choices 
             Console.Clear();
-            Console.Write("What u want to do?\n1. PvP\n2. Load File\n3. PvAI (Not Implemented)\n>");
+            Console.Write("What would you like to do?\n1. PvP\n2. Load File\n3. PvAI (Not Implemented yet..)\n>");
             int input;
 
             while (!(int.TryParse(Console.ReadLine(), out input)))  //wait for user to enter correct input
@@ -53,34 +56,33 @@ namespace ConnectFive
             Console.Clear();
             Console.WriteLine("\n          ~~Connect Five~~");
             Console.WriteLine(" =================================");    //top of the board
-            for (int y = 0; y < size.GetLength(0); y++)
+            for (int y = 0; y < size.GetLength(0); y++)     //print each row
             {
-                //Console.Write("");
-                for (int x = 0; x < size.GetLength(1); x++)
+                for (int x = 0; x < size.GetLength(1); x++) //print each column
                 {
                     Console.Write(" | ");
                     if (size[y, x] == "*")  //check if index is empty
                     {
                         Console.Write(" "); //print an empty space where there are no pieces
                     }
-                    else
+                    else //if the index is not an askterix then print colored checkers
                     {
-                        if (board[y, x] == "A") //color all player one pieces red
+                        if (board[y, x] == "A") //set text color to red
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
-                        else if (board[y, x] == "B") //color all player two pieces blue    
+                        else if (board[y, x] == "B") //set text color to blue    
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }
-                        Console.Write(size[y, x]);  //print a player piece
-                        Console.ForegroundColor = ConsoleColor.Gray; //reset text color
+                        Console.Write(size[y, x]);  //print a colored checker
+                        Console.ForegroundColor = ConsoleColor.Gray; //reset text color to gray
                     }
                 }
                 Console.Write(" |\n");
                 Console.WriteLine(" =================================");    //bottom of the board
             }
-            Console.WriteLine(" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |");
+            Console.WriteLine(" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |");        //something to help users see which column is which
 
             CheckForWin(false);  //call CheckForWin() to check if 5 pieces are in a row
             SwitchPlayers(); //call SwitchPlayers() to switch players
@@ -97,7 +99,7 @@ namespace ConnectFive
             {
                 if (board[i, column] == "*")
                 {
-                    board[i, column] = variables.PlayerLetter;
+                    board[i, column] = Player.PlayerLetter;
                     break;
                 }
             }
@@ -111,16 +113,17 @@ namespace ConnectFive
         static void CheckForInput()
         {
             //this method evaluates user input
+            //this section prints a message identifing the active player
             Console.Write("\n\nReady ");
-            if (variables.player1 == false)
+            if (Player.player1 == false)    //check if it is player one's turn
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
-            else if (variables.player1 == true)
+            else if (Player.player1 == true)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
-            Console.Write(variables.PlayerIDstring);
+            Console.Write(Player.PlayerIDstring);
             Console.ForegroundColor = ConsoleColor.Gray;
 
             Console.Write("\nWhich column would you like to add to? (1-8)\n>");
@@ -143,17 +146,17 @@ namespace ConnectFive
         static void SwitchPlayers()
         {
             //this method switches the active player
-            if (variables.player1 == true)
+            if (Player.player1 == true)
             {
-                variables.PlayerIDstring = "Player One";
-                variables.PlayerLetter = "A";
-                variables.player1 = false;
+                Player.PlayerIDstring = "Player One";
+                Player.PlayerLetter = "A";
+                Player.player1 = false;
             }
-            else if (variables.player1 == false)
+            else if (Player.player1 == false)
             {
-                variables.PlayerIDstring = "Player Two";
-                variables.PlayerLetter = "B";
-                variables.player1 = true;
+                Player.PlayerIDstring = "Player Two";
+                Player.PlayerLetter = "B";
+                Player.player1 = true;
             }
         }
         static void CheckForWin(bool ReadFromFile)
@@ -162,61 +165,60 @@ namespace ConnectFive
 
             int win = 0;
 
-
-            //vertical 
+            //Check Vertical 
             for (int y = 0; y < board.GetLength(0); y++)
             {
                 for (int x = 0; x < (board.GetLength(1) - 3); x++)
                 {
                     if (x < 4)
                     {
-                        if (board[x, y] == variables.PlayerLetter &&
-                        board[x + 1, y] == variables.PlayerLetter &&
-                        board[x + 2, y] == variables.PlayerLetter &&
-                        board[x + 3, y] == variables.PlayerLetter &&
-                        board[x + 4, y] == variables.PlayerLetter)
+                        if (board[x, y] == Player.PlayerLetter &&
+                        board[x + 1, y] == Player.PlayerLetter &&
+                        board[x + 2, y] == Player.PlayerLetter &&
+                        board[x + 3, y] == Player.PlayerLetter &&
+                        board[x + 4, y] == Player.PlayerLetter)
                         {
                             win = 1;
                         }
                     }
                 }
             }
-            //horizontal
+            //Check Horizontal
             for (int x = 0; x < board.GetLength(1); x++)
             {
                 for (int y = 0; y < (board.GetLength(0) - 3); y++)
                 {
                     if (y < 4)
                     {
-                        if (board[x, y] == variables.PlayerLetter &&
-                        board[x, y + 1] == variables.PlayerLetter &&
-                        board[x, y + 2] == variables.PlayerLetter &&
-                        board[x, y + 3] == variables.PlayerLetter &&
-                        board[x, y + 4] == variables.PlayerLetter)
+                        if (board[x, y] == Player.PlayerLetter &&
+                        board[x, y + 1] == Player.PlayerLetter &&
+                        board[x, y + 2] == Player.PlayerLetter &&
+                        board[x, y + 3] == Player.PlayerLetter &&
+                        board[x, y + 4] == Player.PlayerLetter)
                         {
                             win = 1;
                         }
                     }
                 }
             }
-            //diagonal
+            //Check Diagonal
             for (int x = 0; x < board.GetLength(0); x++)
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
                     if (x < 4 && y < 4)
                     {
-                        if ((board[x, y] == variables.PlayerLetter &&
-                            board[x + 1, y + 1] == variables.PlayerLetter &&
-                            board[x + 2, y + 2] == variables.PlayerLetter &&
-                            board[x + 3, y + 3] == variables.PlayerLetter &&
-                            board[x + 4, y + 4] == variables.PlayerLetter)
+                        if ((board[x, y] == Player.PlayerLetter &&
+                            board[x + 1, y + 1] == Player.PlayerLetter &&
+                            board[x + 2, y + 2] == Player.PlayerLetter &&
+                            board[x + 3, y + 3] == Player.PlayerLetter &&
+                            board[x + 4, y + 4] == Player.PlayerLetter)
                              ||
-                            (board[x + 3, y] == variables.PlayerLetter &&
-                            board[x + 2, y + 1] == variables.PlayerLetter &&
-                            board[x + 1, y + 2] == variables.PlayerLetter &&
-                            board[x, y + 3] == variables.PlayerLetter &&
-                            board[x, y + 4] == variables.PlayerLetter))
+                            (board[x + 3, y] == Player.PlayerLetter &&
+                            board[x + 2, y + 1] == Player.PlayerLetter &&
+                            board[x + 1, y + 2] == Player.PlayerLetter &&
+                            board[x, y + 3] == Player.PlayerLetter &&
+                            board[x, y + 4] == Player.PlayerLetter))
                         {
                             win = 1;
                         }
@@ -226,22 +228,20 @@ namespace ConnectFive
 
             if (win == 1 && ReadFromFile == true)
             {
-                Console.WriteLine(variables.PlayerLetter + " won the game!");
+                Console.WriteLine(Player.PlayerLetter + " won this round!");
             }
             else if (win == 1)
             {
-                EndGame(variables.PlayerIDstring, false);
+                EndGame(Player.PlayerIDstring);
                 Console.ReadKey();
             }
             else if (win == 0 & ReadFromFile == true)
             {
-                Console.WriteLine("No one wins");
+                Console.WriteLine("No one won this round");
             }
         }
 
-
-
-        static void EndGame(string winner, bool tie)
+        static void EndGame(string winner)
         {
             //This method displays the winner and resets the board
             Console.WriteLine("\n" + winner + " Won the game!\n Press any key to return to menu.");
@@ -264,62 +264,70 @@ namespace ConnectFive
         }
         static void ReadFromFile()
         {
-            string[] line = File.ReadAllLines("Input.txt");
-
-
-
-            int roundcounter = 0;
-            for (int l = 0; l < line.Length; l++)
+            //This method reads a number of moves from a file and determines which player wins or if it will be a tie.
+            Console.Clear();
+            if (File.Exists("Input.txt"))
             {
-                //thanks patrick
-                string LineLength = line[l];
-                int WhiteSpaceCounter = 0;
-                int characterRemovalCounter = 0;
-                for (int i = 0; i < LineLength.Length; i++)
+                string[] line = File.ReadAllLines("Input.txt");
+
+                int roundcounter = 0;
+                for (int l = 0; l < line.Length; l++)
                 {
-                    if (LineLength[i] == ' ')
+                    //thanks patrick
+                    string LineLength = line[l];
+                    int WhiteSpaceCounter = 0;
+                    int characterRemovalCounter = 0;
+                    for (int i = 0; i < LineLength.Length; i++)
                     {
-                        WhiteSpaceCounter++;
-                    }
-                    if (i != 0)
-                    {
-                        if ((LineLength[i] != ' ') && (LineLength[i - 1] != ' '))
+                        if (LineLength[i] == ' ')
                         {
-                            characterRemovalCounter++;
+                            WhiteSpaceCounter++;
+                        }
+                        if (i != 0)
+                        {
+                            if ((LineLength[i] != ' ') && (LineLength[i - 1] != ' '))
+                            {
+                                characterRemovalCounter++;
+                            }
                         }
                     }
-                }
-                int AmountOfMoves = LineLength.Length - WhiteSpaceCounter - characterRemovalCounter;
-                int[] Moves = new int[AmountOfMoves];
-                roundcounter++;
-                Console.WriteLine("Round: " + roundcounter + "/" + line.Length);
-                for (int i = 0; i < Moves.Length; i++)
-                {
-                    if (i % 2 == 0)
+                    int AmountOfMoves = LineLength.Length - WhiteSpaceCounter - characterRemovalCounter;
+                    int[] Moves = new int[AmountOfMoves];
+                    roundcounter++;
+                    Console.WriteLine("Round: " + roundcounter + "/" + line.Length);
+                    for (int i = 0; i < Moves.Length; i++)
                     {
-                        variables.PlayerLetter = "A";
-                    }
-                    else
-                    {
-                        variables.PlayerLetter = "B";
-                    }
+                        if (i % 2 == 0)
+                        {
+                            Player.PlayerLetter = "A";
+                        }
+                        else
+                        {
+                            Player.PlayerLetter = "B";
+                        }
 
-                    Moves[i] = int.Parse(LineLength.Split(' ')[i]);
-                    Console.WriteLine(Moves[i]);
-                    DropPlayerPiece(Moves[i], true);
-                    //CheckForWin();
+                        Moves[i] = int.Parse(LineLength.Split(' ')[i]);                       
+                        DropPlayerPiece(Moves[i], true);
 
+                    }
+                    CheckForWin(true);
+
+                    ClearBoard();
+                    
+                    
                 }
-                CheckForWin(true);
-                //
-
-                ClearBoard();
-                Console.WriteLine("\n");
                 Console.ReadKey();
             }
+            else
+            {
+                Console.WriteLine("Input.txt does not exist. Please create it.");
+                Console.ReadKey();
+                Menu();
+            }
+            
         }
 
-        class variables
+        class Player
         {
             public static int x = 7;
             public static string PlayerIDstring;
