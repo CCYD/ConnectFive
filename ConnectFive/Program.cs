@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Diagnostics;
 //Yuri Doubas
 //Unit 2 Assignment 3
 namespace ConnectFive
@@ -17,7 +16,6 @@ namespace ConnectFive
         static void Main(string[] args)
         {
             ClearBoard();
-            SwitchPlayers();
             Menu();  //call Menu() method
             Console.ReadKey();
         }
@@ -34,7 +32,7 @@ namespace ConnectFive
                 Console.Write("Invalid input. Try again. \n>");
             }
             if (input == 1)
-            {                
+            {
                 printBoard(board);
             }
             else if (input == 2)
@@ -85,7 +83,7 @@ namespace ConnectFive
             Console.WriteLine(" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |");
 
             CheckForWin(false);  //call CheckForWin() to check if 5 pieces are in a row
-            //SwitchPlayers(); //call SwitchPlayers() to switch players
+            SwitchPlayers(); //call SwitchPlayers() to switch players
 
             CheckForInput(); //call CheckForInput() to check user input
 
@@ -100,8 +98,6 @@ namespace ConnectFive
                 if (board[i, column] == "*")
                 {
                     board[i, column] = variables.PlayerLetter;
-                    Debug.WriteLine(i + "," + column);
-                    SwitchPlayers(); //call SwitchPlayers() to switch players
                     break;
                 }
             }
@@ -126,15 +122,15 @@ namespace ConnectFive
             }
             Console.Write(variables.PlayerIDstring);
             Console.ForegroundColor = ConsoleColor.Gray;
-            
-            Console.WriteLine("\nWhich column would you like to add to? (1-8)\n>");
+
+            Console.Write("\nWhich column would you like to add to? (1-8)\n>");
 
             int input;
             while (!(int.TryParse(Console.ReadLine(), out input)))  //ask user for input 
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
-            
+
             if (input >= 1 && input <= 8)   //check if user entered a number between 1 and 8
             {
                 DropPlayerPiece(input, false);    //call DropPlayerPiece with input parameter
@@ -159,11 +155,11 @@ namespace ConnectFive
                 variables.PlayerLetter = "B";
                 variables.player1 = true;
             }
-        }        
+        }
         static void CheckForWin(bool ReadFromFile)
         {
             //this method checks horizontaly, vertically, or diagonally for 5 checkers and determines the winner
-          
+
             int win = 0;
 
 
@@ -241,14 +237,11 @@ namespace ConnectFive
             {
                 Console.WriteLine("No one wins");
             }
-
-
-
         }
 
 
 
-        static void EndGame(string winner , bool tie)
+        static void EndGame(string winner, bool tie)
         {
             //This method displays the winner and resets the board
             Console.WriteLine("\n" + winner + " Won the game!\n Press any key to return to menu.");
@@ -309,14 +302,16 @@ namespace ConnectFive
                     else
                     {
                         variables.PlayerLetter = "B";
-                    } 
+                    }
 
                     Moves[i] = int.Parse(LineLength.Split(' ')[i]);
                     Console.WriteLine(Moves[i]);
                     DropPlayerPiece(Moves[i], true);
+                    //CheckForWin();
+
                 }
                 CheckForWin(true);
-
+                //
 
                 ClearBoard();
                 Console.WriteLine("\n");
@@ -327,14 +322,14 @@ namespace ConnectFive
         class variables
         {
             public static int x = 7;
-            public static string PlayerIDstring = "Player 1";
+            public static string PlayerIDstring;
             public static bool player1 = true;
-            public static string PlayerLetter = "A";
+            public static string PlayerLetter;
 
 
 
         }
-        
+
     }
 }
 /*
