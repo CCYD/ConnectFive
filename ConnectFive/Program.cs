@@ -115,11 +115,11 @@ namespace ConnectFive
             //this method evaluates user input
             //this section prints a message identifing the active player
             Console.Write("\n\nReady ");
-            if (Player.player1 == false)    //check if it is player one's turn
+            if (Player.Player1 == false)    //check if it is player one's turn
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
-            else if (Player.player1 == true)
+            else if (Player.Player1 == true)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
@@ -146,17 +146,17 @@ namespace ConnectFive
         static void SwitchPlayers()
         {
             //this method switches the active player
-            if (Player.player1 == true)
+            if (Player.Player1 == true)
             {
                 Player.PlayerIDstring = "Player One";
                 Player.PlayerLetter = "A";
-                Player.player1 = false;
+                Player.Player1 = false;
             }
-            else if (Player.player1 == false)
+            else if (Player.Player1 == false)
             {
                 Player.PlayerIDstring = "Player Two";
                 Player.PlayerLetter = "B";
-                Player.player1 = true;
+                Player.Player1 = true;
             }
         }
         static void CheckForWin(bool ReadFromFile)
@@ -329,10 +329,10 @@ namespace ConnectFive
 
         class Player
         {
-            
-            public static string PlayerIDstring;
-            public static bool player1 = true;
-            public static string PlayerLetter;
+            //This class contains various variables regarding player status and id
+            public static string PlayerIDstring;    //Either "Player One" or "Player Two"
+            public static bool Player1 = true;      //determines if player one is active or not
+            public static string PlayerLetter;      //identifies the player on the board and is the letter stored in the board[,] array
         }
 
     }
