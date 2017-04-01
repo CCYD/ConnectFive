@@ -244,7 +244,7 @@ namespace ConnectFive
         static void EndGame(string winner)
         {
             //This method displays the winner and resets the board
-            Console.WriteLine("\n" + winner + " Won the game!\n Press any key to return to menu.");
+            Console.WriteLine("\n" + winner + " won the game!\nPress any key to return to menu.");
             Console.ReadKey();
 
             ClearBoard();
@@ -329,13 +329,10 @@ namespace ConnectFive
 
         class Player
         {
-            public static int x = 7;
+            
             public static string PlayerIDstring;
             public static bool player1 = true;
             public static string PlayerLetter;
-
-
-
         }
 
     }
