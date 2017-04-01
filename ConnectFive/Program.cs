@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 //Yuri Doubas
 //Unit 2 Assignment 3
 namespace ConnectFive
@@ -16,6 +17,7 @@ namespace ConnectFive
         static void Main(string[] args)
         {
             ClearBoard();
+            SwitchPlayers();
             Menu();  //call Menu() method
             Console.ReadKey();
         }
@@ -83,7 +85,7 @@ namespace ConnectFive
             Console.WriteLine(" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |");
 
             CheckForWin(false);  //call CheckForWin() to check if 5 pieces are in a row
-            SwitchPlayers(); //call SwitchPlayers() to switch players
+            //SwitchPlayers(); //call SwitchPlayers() to switch players
 
             CheckForInput(); //call CheckForInput() to check user input
 
@@ -98,6 +100,8 @@ namespace ConnectFive
                 if (board[i, column] == "*")
                 {
                     board[i, column] = variables.PlayerLetter;
+                    Debug.WriteLine(i + "," + column);
+                    SwitchPlayers(); //call SwitchPlayers() to switch players
                     break;
                 }
             }
@@ -237,37 +241,11 @@ namespace ConnectFive
             {
                 Console.WriteLine("No one wins");
             }
-            //else if (win == 0 & CheckForTie() == true)
-            {
-              //  Console.WriteLine("Board is full. Tie");
-            }
 
 
 
         }
 
-        static bool CheckForTie()
-        {
-            int counter = 0;
-            for (int i = 0; i < board.GetLength(0); i++)    //for each row
-            {
-                for (int d = 0; d < board.GetLength(1); d++) //for each column
-                {
-                    board[i, d] = "*";
-                    if (board[i,d] == "A" || board[i,d] == "B")
-                    {
-                        counter++;
-
-                    }
-                    if (counter == board.GetLength(0) * board.GetLength(1))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-
-        }
 
 
         static void EndGame(string winner , bool tie)
@@ -336,11 +314,9 @@ namespace ConnectFive
                     Moves[i] = int.Parse(LineLength.Split(' ')[i]);
                     Console.WriteLine(Moves[i]);
                     DropPlayerPiece(Moves[i], true);
-                    //CheckForWin();
-
                 }
                 CheckForWin(true);
-                //
+
 
                 ClearBoard();
                 Console.WriteLine("\n");
@@ -351,9 +327,9 @@ namespace ConnectFive
         class variables
         {
             public static int x = 7;
-            public static string PlayerIDstring;
+            public static string PlayerIDstring = "Player 1";
             public static bool player1 = true;
-            public static string PlayerLetter;
+            public static string PlayerLetter = "A";
 
 
 
