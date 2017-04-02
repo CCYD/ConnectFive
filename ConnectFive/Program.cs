@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 //Yuri Doubas
 //Unit 2 Assignment 3
 //This program is a game played by two players that alternate placing checkers on an 8x8 board. The first player to place 5 checkers in a row horizontally, vertically,
@@ -162,6 +163,7 @@ namespace ConnectFive
         static void CheckForWin(bool ReadFromFile)
         {
             //this method checks horizontaly, vertically, or diagonally for 5 checkers and determines the winner
+            //the check starts from the top and goes down
 
             int win = 0;
 
@@ -208,20 +210,26 @@ namespace ConnectFive
                 {
                     if (x < 4 && y < 4)
                     {
-                        if ((board[x, y] == Player.PlayerLetter &&
+                        //Back slash
+                        if (board[x, y] == Player.PlayerLetter &&
                             board[x + 1, y + 1] == Player.PlayerLetter &&
                             board[x + 2, y + 2] == Player.PlayerLetter &&
                             board[x + 3, y + 3] == Player.PlayerLetter &&
                             board[x + 4, y + 4] == Player.PlayerLetter)
-                             ||
-                            (board[x + 3, y] == Player.PlayerLetter &&
-                            board[x + 2, y + 1] == Player.PlayerLetter &&
-                            board[x + 1, y + 2] == Player.PlayerLetter &&
-                            board[x, y + 3] == Player.PlayerLetter &&
-                            board[x, y + 4] == Player.PlayerLetter))
                         {
                             win = 1;
                         }
+                        Debug.WriteLine(x + "," + y);
+                        //Forward slash..THIS IS BROKE
+                        if (board[x, y] == Player.PlayerLetter &&
+                            board[x - 1, y + 1] == Player.PlayerLetter &&
+                            board[x - 2, y + 2] == Player.PlayerLetter &&
+                            board[x - 3, y + 3] == Player.PlayerLetter &&
+                            board[x - 4, y + 4] == Player.PlayerLetter)
+                        {
+                            win = 1;
+                        }
+
                     }
                 }
             }
@@ -306,15 +314,11 @@ namespace ConnectFive
                             Player.PlayerLetter = "B";
                         }
 
-                        Moves[i] = int.Parse(LineLength.Split(' ')[i]);                       
+                        Moves[i] = int.Parse(LineLength.Split(' ')[i]);
                         DropPlayerPiece(Moves[i], true);
-
                     }
                     CheckForWin(true);
-
-                    ClearBoard();
-                    
-                    
+                    ClearBoard();     //reset the board array   
                 }
                 Console.ReadKey();
             }
@@ -324,17 +328,16 @@ namespace ConnectFive
                 Console.ReadKey();
                 Menu();
             }
-            
+
         }
 
         class Player
         {
             //This class contains various variables regarding player status and id
-            public static string PlayerIDstring;    //Either "Player One" or "Player Two"
+            public static string PlayerIDstring = "Player One";    //Either "Player One" or "Player Two"
             public static bool Player1 = true;      //determines if player one is active or not
             public static string PlayerLetter;      //identifies the player on the board and is the letter stored in the board[,] array
         }
-
     }
 }
 /*
