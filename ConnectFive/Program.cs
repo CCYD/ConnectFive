@@ -35,19 +35,19 @@ namespace ConnectFive
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
-            if (input == 1)
+            if (input == 1) //option 1
             {
                 printBoard(board);
             }
-            else if (input == 2)
+            else if (input == 2)  //option 2
             {
                 ReadFromFile();
             }
-            else if (input == 3)
+            else if (input == 3) //option 3
             {
 
             }
-            Menu(); //loop back to Menu()
+            Menu(); //loop back to Menu()....recursion?
 
         }
 
@@ -98,25 +98,20 @@ namespace ConnectFive
             column--;      //the user enters a value of 1-8 but the for loop uses 0-7. This solves that
             for (int i = 7; i >= 0; i--)    //this places the player letter in the bottom most index
             {
-
-                if (board[i, column] == "*")
+                if (board[i, column] == "*")    //check if index is empty 
                 {
                     board[i, column] = Player.PlayerLetter;
                     break;
                 }
-            }
-            
-            
-            if (ReadFromFile == false)
+            }                 
+            if (ReadFromFile == false)  //if the program is reading from a file then dont show the board
             {
                 printBoard(board);  //call the printBoard() method to print the board
             }
-
         }
 
         static void CheckForInput()
         {
-            string lastplayer;
             //this method evaluates user input
             //this section prints a message identifing the active player
             Console.Write("\n\nReady ");
@@ -132,15 +127,13 @@ namespace ConnectFive
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("\nWhich column would you like to add to? (1-8)\n>");
 
-
             //one big mess lol
             int input;
-            while (!(int.TryParse(Console.ReadLine(), out input)))  //ask user for input 
+            while (!(int.TryParse(Console.ReadLine(), out input)))  //loop until user entered a proper input
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
-
-            
+         
             if (input >= 1 && input <= 8)   //check if user entered a number between 1 and 8
             {
                 if (board[0, input - 1] == "A" || board[0, input - 1] == "B")   //check if top of board is full
@@ -157,12 +150,6 @@ namespace ConnectFive
             {
                 CheckForInput();        //recursion?
             }
-
-
-
-
-
-
         }
         static void SwitchPlayers()
         {
@@ -241,7 +228,7 @@ namespace ConnectFive
                         }
                     }
 
-                    if (x <= 3 && y >= 4) //check if the topmost checker is at (3,4) to avoid errors
+                    if (x <= 3 && y >= 4) //check if the top most checker is at (3,4) to avoid errors
                     {
                         //Forward slash
                         if (board[x, y] == Player.PlayerLetter &&
@@ -255,7 +242,25 @@ namespace ConnectFive
                     }
                 }
             }
-            //maybe create a new for loop for forward slash
+
+            int counter = 0;
+            for (int i = 0; i < board.GetLength(0); i++)    //check if board is full
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (board[i,j] == "A" || board[i,j] == "B")
+                    {
+                        counter++;
+                        if (counter == board.GetLength(0) * board.GetLength(1))
+                        {
+                            EndGame("No one");
+                        }
+                    }
+                }
+
+            }
+
+
 
             if (win == 1 && ReadFromFile == true)
             {
@@ -280,8 +285,8 @@ namespace ConnectFive
 
             Player.Player1 = true;
 
-            ClearBoard();
-            Menu();
+            ClearBoard();   //reset the array
+            Menu();         //return to the main menu
         }
         static void ClearBoard()
         {
@@ -300,9 +305,9 @@ namespace ConnectFive
             Console.Clear();
             if (File.Exists("Input.txt"))
             {
-                string[] line = File.ReadAllLines("Input.txt");
+                string[] line = File.ReadAllLines("Input.txt"); //place each individual line in an array
 
-                int roundcounter = 0;
+                int roundcounter = 0;   
                 for (int l = 0; l < line.Length; l++)
                 {
                     //thanks patrick
@@ -341,7 +346,7 @@ namespace ConnectFive
                         Moves[i] = int.Parse(LineLength.Split(' ')[i]);
                         DropChecker(Moves[i], true);
                     }
-                    CheckForWin(true);
+                    CheckForWin(true); //check if anyone has won so far
                     ClearBoard();     //reset the board array   
                 }
                 Console.ReadKey();
