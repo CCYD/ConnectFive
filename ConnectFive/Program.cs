@@ -116,11 +116,11 @@ namespace ConnectFive
             //this method evaluates user input
             //this section prints a message identifing the active player
             Console.Write("\n\nReady ");
-            if (Player.Player1 == false)    //check if it is player one's turn
+            if (Player.Player1 == false)    //check if it is player two's turn
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
-            else if (Player.Player1 == true)
+            else if (Player.Player1 == true) //check if it is player one's turn
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
@@ -259,7 +259,7 @@ namespace ConnectFive
             Console.ReadKey();
 
             ClearBoard();
-
+            SwitchPlayers();
             Menu();
         }
         static void ClearBoard()
