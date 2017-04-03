@@ -19,7 +19,6 @@ namespace ConnectFive
 
         static void Main(string[] args)
         {
-            //SwitchPlayers();
             ClearBoard();
             Menu();  //call Menu() method
             Console.ReadKey();
@@ -29,7 +28,7 @@ namespace ConnectFive
         {
             //This method presents the user with 3 choices 
             Console.Clear();
-            Console.Write("What would you like to do?\n1. PvP\n2. Load File\n3. PvAI (Not Implemented yet..)\n>");
+            Console.Write("What would you like to do?\n1. PvP\n2. Load File\n3. PvAI (Not implemented yet..)\n>");
             int input;
 
             while (!(int.TryParse(Console.ReadLine(), out input)))  //wait for user to enter correct input
@@ -224,7 +223,7 @@ namespace ConnectFive
 
                     if (x <= 3 &&  y >= 4)
                     {    
-                        //Forward slash..THIS IS BROKE
+                        //Forward slash
                         if (board[x, y] == Player.PlayerLetter &&
                             board[x + 1, y - 1] == Player.PlayerLetter &&
                             board[x + 2, y - 2] == Player.PlayerLetter &&
