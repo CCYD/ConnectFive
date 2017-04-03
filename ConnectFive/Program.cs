@@ -92,18 +92,21 @@ namespace ConnectFive
 
 
         }
-        static void DropPlayerPiece(int column, bool ReadFromFile)
+        static void DropChecker(int column, bool ReadFromFile)
         {
             //this method drops a piece in the user selected column
             column--;      //the user enters a value of 1-8 but the for loop uses 0-7. This solves that
-            for (int i = 7; i >= 0; i--)    //this places the player letter in the bottommost index
+            for (int i = 7; i >= 0; i--)    //this places the player letter in the bottom most index
             {
+
                 if (board[i, column] == "*")
                 {
                     board[i, column] = Player.PlayerLetter;
                     break;
                 }
             }
+            
+            
             if (ReadFromFile == false)
             {
                 printBoard(board);  //call the printBoard() method to print the board
@@ -113,6 +116,7 @@ namespace ConnectFive
 
         static void CheckForInput()
         {
+            string lastplayer;
             //this method evaluates user input
             //this section prints a message identifing the active player
             Console.Write("\n\nReady ");
@@ -126,23 +130,39 @@ namespace ConnectFive
             }
             Console.Write(Player.PlayerIDstring);
             Console.ForegroundColor = ConsoleColor.Gray;
-
             Console.Write("\nWhich column would you like to add to? (1-8)\n>");
 
+
+            //one big mess lol
             int input;
             while (!(int.TryParse(Console.ReadLine(), out input)))  //ask user for input 
             {
                 Console.Write("Invalid input. Try again. \n>");
             }
 
+            
             if (input >= 1 && input <= 8)   //check if user entered a number between 1 and 8
             {
-                DropPlayerPiece(input, false);    //call DropPlayerPiece with input parameter
+                if (board[0, input - 1] == "A" || board[0, input - 1] == "B")   //check if top of board is full
+                {
+                    Console.WriteLine("Column is full");                      
+                    CheckForInput();
+                }
+                else
+                {
+                    DropChecker(input, false);
+                }
             }
             else
-           {               
+            {
                 CheckForInput();        //recursion?
             }
+
+
+
+
+
+
         }
         static void SwitchPlayers()
         {
@@ -208,7 +228,7 @@ namespace ConnectFive
             {
                 for (int y = 0; y < board.GetLength(1); y++)
                 {
-                    if (x < 4 && y < 4)
+                    if (x < 4 && y < 4) //check if the top most checker is at (4,4) to aviod errors
                     {
                         //Back slash
                         if (board[x, y] == Player.PlayerLetter &&
@@ -221,8 +241,8 @@ namespace ConnectFive
                         }
                     }
 
-                    if (x <= 3 &&  y >= 4)
-                    {    
+                    if (x <= 3 && y >= 4) //check if the topmost checker is at (3,4) to avoid errors
+                    {
                         //Forward slash
                         if (board[x, y] == Player.PlayerLetter &&
                             board[x + 1, y - 1] == Player.PlayerLetter &&
@@ -231,7 +251,7 @@ namespace ConnectFive
                             board[x + 4, y - 4] == Player.PlayerLetter)
                         {
                             win = 1;
-                        }                        
+                        }
                     }
                 }
             }
@@ -319,7 +339,7 @@ namespace ConnectFive
                         }
 
                         Moves[i] = int.Parse(LineLength.Split(' ')[i]);
-                        DropPlayerPiece(Moves[i], true);
+                        DropChecker(Moves[i], true);
                     }
                     CheckForWin(true);
                     ClearBoard();     //reset the board array   
