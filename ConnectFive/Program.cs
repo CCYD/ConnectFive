@@ -19,6 +19,7 @@ namespace ConnectFive
 
         static void Main(string[] args)
         {
+            //SwitchPlayers();
             ClearBoard();
             Menu();  //call Menu() method
             Console.ReadKey();
@@ -140,7 +141,7 @@ namespace ConnectFive
                 DropPlayerPiece(input, false);    //call DropPlayerPiece with input parameter
             }
             else
-            {
+           {               
                 CheckForInput();        //recursion?
             }
         }
@@ -219,20 +220,23 @@ namespace ConnectFive
                         {
                             win = 1;
                         }
-                        Debug.WriteLine(x + "," + y);
+                    }
+
+                    if (x <= 3 &&  y >= 4)
+                    {    
                         //Forward slash..THIS IS BROKE
                         if (board[x, y] == Player.PlayerLetter &&
-                            board[x - 1, y + 1] == Player.PlayerLetter &&
-                            board[x - 2, y + 2] == Player.PlayerLetter &&
-                            board[x - 3, y + 3] == Player.PlayerLetter &&
-                            board[x - 4, y + 4] == Player.PlayerLetter)
+                            board[x + 1, y - 1] == Player.PlayerLetter &&
+                            board[x + 2, y - 2] == Player.PlayerLetter &&
+                            board[x + 3, y - 3] == Player.PlayerLetter &&
+                            board[x + 4, y - 4] == Player.PlayerLetter)
                         {
                             win = 1;
-                        }
-
+                        }                        
                     }
                 }
             }
+            //maybe create a new for loop for forward slash
 
             if (win == 1 && ReadFromFile == true)
             {
