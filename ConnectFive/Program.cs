@@ -258,8 +258,9 @@ namespace ConnectFive
             Console.WriteLine("\n" + winner + " won the game!\nPress any key to return to menu.");
             Console.ReadKey();
 
+            Player.Player1 = true;
+
             ClearBoard();
-            SwitchPlayers();
             Menu();
         }
         static void ClearBoard()
