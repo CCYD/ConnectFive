@@ -10,18 +10,18 @@ using System.Diagnostics;
 //This program is a game played by two players that alternate placing checkers on an 8x8 board. The first player to place 5 checkers in a row horizontally, vertically,
 //or diagonally wins the game.
 //ye be warned for spaghetti lies ahead.
+//good luck lol
 namespace ConnectFive
 {
-    class Program
+    public class Program
     {
-        //create 2d array which will hold the board and checkers
+        //create 2d array of size 8x8 which will hold the board and checkers
         public static string[,] board = new string[8, 8];
 
         static void Main(string[] args)
         {
-            ClearBoard();
-            Menu();  //call Menu() method
-            Console.ReadKey();
+            ClearBoard(); //call ClearBoard(); to fill the array with asteriks
+            Menu();  //call Menu() method            
         }
 
         static void Menu()
@@ -45,7 +45,8 @@ namespace ConnectFive
             }
             else if (input == 3) //option 3
             {
-
+                Console.WriteLine("It says not implemented..");
+                Console.ReadKey();
             }
             Menu(); //loop back to Menu()....recursion?
 
@@ -87,10 +88,7 @@ namespace ConnectFive
 
             CheckForWin(false);  //call CheckForWin() to check if 5 pieces are in a row
             SwitchPlayers(); //call SwitchPlayers() to switch players
-
             CheckForInput(); //call CheckForInput() to check user input
-
-
         }
         static void DropChecker(int column, bool ReadFromFile)
         {
@@ -100,7 +98,7 @@ namespace ConnectFive
             {
                 if (board[i, column] == "*")    //check if index is empty 
                 {
-                    board[i, column] = Player.PlayerLetter;
+                    board[i, column] = Player.PlayerLetter; //drop a checker at the index
                     break;
                 }
             }                 
@@ -139,16 +137,16 @@ namespace ConnectFive
                 if (board[0, input - 1] == "A" || board[0, input - 1] == "B")   //check if top of board is full
                 {
                     Console.WriteLine("Column is full");                      
-                    CheckForInput();
+                    CheckForInput();    //recursion?
                 }
                 else
                 {
-                    DropChecker(input, false);
+                    DropChecker(input, false);  //call DropChecker() method to drop a checker at the inputted column
                 }
             }
             else
             {
-                CheckForInput();        //recursion?
+                CheckForInput();        //more recursion?
             }
         }
         static void SwitchPlayers()
@@ -227,7 +225,6 @@ namespace ConnectFive
                             win = 1;
                         }
                     }
-
                     if (x <= 3 && y >= 4) //check if the top most checker is at (3,4) to avoid errors
                     {
                         //Forward slash
@@ -242,9 +239,9 @@ namespace ConnectFive
                     }
                 }
             }
-
+            //check if board is full
             int counter = 0;
-            for (int i = 0; i < board.GetLength(0); i++)    //check if board is full
+            for (int i = 0; i < board.GetLength(0); i++)    
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
@@ -253,16 +250,12 @@ namespace ConnectFive
                         counter++;
                         if (counter == board.GetLength(0) * board.GetLength(1))
                         {
-                            EndGame("No one");
+                            EndGame("Board is full. No one");
                         }
                     }
                 }
-
             }
-
-
-
-            if (win == 1 && ReadFromFile == true)
+            if (win == 1 && ReadFromFile == true) 
             {
                 Console.WriteLine(Player.PlayerLetter + " won this round!");
             }
@@ -283,7 +276,7 @@ namespace ConnectFive
             Console.WriteLine("\n" + winner + " won the game!\nPress any key to return to menu.");
             Console.ReadKey();
 
-            Player.Player1 = true;
+            Player.Player1 = true;  //set player one as the first player
 
             ClearBoard();   //reset the array
             Menu();         //return to the main menu
@@ -295,7 +288,7 @@ namespace ConnectFive
             {
                 for (int d = 0; d < board.GetLength(1); d++) //for each column
                 {
-                    board[i, d] = "*";
+                    board[i, d] = "*";  //set index as "*"
                 }
             }
         }
@@ -303,14 +296,14 @@ namespace ConnectFive
         {
             //This method reads a number of moves from a file and determines which player wins or if it will be a tie.
             Console.Clear();
-            if (File.Exists("Input.txt"))
+            if (File.Exists("Input.txt"))   //check if "Input.txt" exists
             {
                 string[] line = File.ReadAllLines("Input.txt"); //place each individual line in an array
 
                 int roundcounter = 0;   
                 for (int l = 0; l < line.Length; l++)
                 {
-                    //thanks patrick
+                    //thanks patrick for this magic
                     string LineLength = line[l];
                     int WhiteSpaceCounter = 0;
                     int characterRemovalCounter = 0;
@@ -334,7 +327,8 @@ namespace ConnectFive
                     Console.WriteLine("Round: " + roundcounter + "/" + line.Length);
                     for (int i = 0; i < Moves.Length; i++)
                     {
-                        if (i % 2 == 0)
+                        //check if it is player one's or player two's turn
+                        if (i % 2 == 0) 
                         {
                             Player.PlayerLetter = "A";
                         }
@@ -344,20 +338,19 @@ namespace ConnectFive
                         }
 
                         Moves[i] = int.Parse(LineLength.Split(' ')[i]);
-                        DropChecker(Moves[i], true);
+                        DropChecker(Moves[i], true);    //drop checker in column
                     }
                     CheckForWin(true); //check if anyone has won so far
                     ClearBoard();     //reset the board array   
                 }
                 Console.ReadKey();
             }
-            else
+            else    //if the file does not exist then kindly ask the user to create it
             {
                 Console.WriteLine("Input.txt does not exist. Please create it.");
                 Console.ReadKey();
-                Menu();
+                Menu(); //call Menu() method to return to menu
             }
-
         }
 
         class Player
@@ -365,7 +358,7 @@ namespace ConnectFive
             //This class contains various variables regarding player status and id
             public static string PlayerIDstring = "Player One";    //Either "Player One" or "Player Two"
             public static bool Player1 = true;      //determines if player one is active or not
-            public static string PlayerLetter;      //identifies the player on the board and is the letter stored in the board[,] array
+            public static string PlayerLetter;      //identifies the player on the board and is the player identifier stored in the board[,] array
         }
     }
 }
